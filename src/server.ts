@@ -37,6 +37,11 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       return res.status(400).send(`Image url is required`);
     }
 
+    const isImageURL = require('valid-image-url');
+    if(! await isImageURL(image_url)){
+      return res.status(400).send(`is not a valid image url`);
+    }
+
     try {
       const filteredpath= await filterImageFromURL(image_url);
       console.log(`--- Filtered image is ${filteredpath}`);
@@ -46,7 +51,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     }
     );
     } catch (error) {
-      return res.status(500).send(`Internal error`);
+      return res.status(500).send(`Unable to handle your request`);
     }
     
   } );
