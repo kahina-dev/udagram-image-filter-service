@@ -51,7 +51,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     }
     );
     } catch (error) {
-      return res.status(500).send(`Internal error`);
+      return res.status(500).send(`Unable to handle your request`);
     }
     
   } );
