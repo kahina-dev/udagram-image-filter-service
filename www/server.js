@@ -41,6 +41,10 @@ const util_1 = require("./util/util");
         if (!image_url) {
             return res.status(400).send(`Image url is required`);
         }
+        const isImageURL = require('valid-image-url');
+        if (!(yield isImageURL(image_url))) {
+            return res.status(400).send(`is not a valid image url`);
+        }
         try {
             const filteredpath = yield util_1.filterImageFromURL(image_url);
             console.log(`--- Filtered image is ${filteredpath}`);
@@ -50,7 +54,7 @@ const util_1 = require("./util/util");
             });
         }
         catch (error) {
-            return res.status(500).send(`Internal error`);
+            return res.status(500).send(`Unable to handle your request`);
         }
     }));
     // Root Endpoint
