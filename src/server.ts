@@ -1,4 +1,5 @@
 import express from 'express';
+import { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 import { sequelize } from './sequelize';
@@ -40,7 +41,7 @@ import { requireAuth } from './router/router';
 
   //! END @TODO1
   
-  app.get( "/filteredimage/", requireAuth, async ( req, res ) => {
+  app.get( "/filteredimage/", requireAuth, async ( req:Request , res:Response ) => {
     let {image_url}=req.query;
     if(!image_url){
       return res.status(400).send(`Image url is required`);
@@ -67,7 +68,7 @@ import { requireAuth } from './router/router';
 
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
+  app.get( "/", async ( req:Request , res:Response ) => {
     res.send("try GET /filteredimage?image_url={{}}")
   } );
   
