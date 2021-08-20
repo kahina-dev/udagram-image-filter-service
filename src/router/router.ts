@@ -30,13 +30,13 @@ router.get('/:id', requireAuth, async (req: Request, res: Response) => {
 });
 
 async function comparePasswords(plainTextPassword: string, hash: string): Promise<boolean> {
-    //@TODO Use Bcrypt to Compare your password to your Salted Hashed Password
+    
     return await bcryptjs.compare(plainTextPassword, hash);
-    //return await bcrypt.compare(plainTextPassword, hash);
+    
 }
 
 function generateJWT(user: User): string {
-    //@TODO Use jwt to create a new JWT Payload containing
+    
     return jwt.sign({email:user.email, password:user.password_hash}, config.jwt, { algorithm: 'HS256'});
 }
 
