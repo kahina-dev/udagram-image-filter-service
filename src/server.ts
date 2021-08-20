@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 import { sequelize } from './sequelize';
 import { User } from './model/User';
+import { UserRouter} from './router/router';
 
 (async () => {
   // Adding User model to a Sequelize instance
@@ -18,6 +19,8 @@ import { User } from './model/User';
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
 
+  app.use('/user/', UserRouter);
+  
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
   // endpoint to filter an image from a public url.
