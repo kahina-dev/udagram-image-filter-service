@@ -4,6 +4,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 import { sequelize } from './sequelize';
 import { User } from './model/User';
 import { UserRouter} from './router/router';
+import { requireAuth } from './router/router';
 
 (async () => {
   // Adding User model to a Sequelize instance
@@ -20,7 +21,7 @@ import { UserRouter} from './router/router';
   app.use(bodyParser.json());
 
   app.use('/user/', UserRouter);
-  
+
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
   // endpoint to filter an image from a public url.
@@ -39,7 +40,7 @@ import { UserRouter} from './router/router';
 
   //! END @TODO1
   
-  app.get( "/filteredimage/", async ( req, res ) => {
+  app.get( "/filteredimage/", requireAuth, async ( req, res ) => {
     let {image_url}=req.query;
     if(!image_url){
       return res.status(400).send(`Image url is required`);
