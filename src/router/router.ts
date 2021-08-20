@@ -12,6 +12,13 @@ const router: Router = Router();
 router.get('/', async (req: Request, res: Response) => {
 });
 
+router.get('/authenticated', 
+    requireAuth, 
+    async (req: Request, res: Response) => {
+        return res.status(200).send({ auth: true, message: 'Authenticated.' });
+});
+
+
 router.get('/:id', requireAuth, async (req: Request, res: Response) => {
     let { id } = req.params;
     const item = await User.findByPk(id);
@@ -30,7 +37,7 @@ async function comparePasswords(plainTextPassword: string, hash: string): Promis
 
 function generateJWT(user: User): string {
     //@TODO Use jwt to create a new JWT Payload containing
-    return jwt.sign({email:user.email, password:user.password_hash}, config.jwt);
+    return jwt.sign({email:user.email, password:user.password_hash}, config.jwt, { algorithm: 'HS256'});
 }
 
 router.post('/login', async (req: Request, res: Response) => {
@@ -68,31 +75,22 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
-    console.info("Require auth")
+  
     // return next();
      if (!req.headers || !req.headers.authorization){
          return res.status(401).send({ message: 'No authorization headers.' });
     }
     
-
-    const token_bearer = req.headers.authorization.split(' ');
-    if(token_bearer.length != 2){
-        return res.status(401).send({ message: 'Malformed token.' });
-     }
+    const token= req.headers.authorization;
     
-     const token = token_bearer[1];
      return jwt.verify(token, config.jwt, (err, decoded) => {
        if (err) {
          return res.status(500).send({ auth: false, message: 'Failed to authenticate.' });
       }
+      console.log(`--- Decoded user is ${decoded.email}`);
+      
       return next();
      });
 }
-
-router.get('/verification', 
-    requireAuth, 
-    async (req: Request, res: Response) => {
-        return res.status(200).send({ auth: true, message: 'Authenticated.' });
-});
 
 export const UserRouter: Router = router;
